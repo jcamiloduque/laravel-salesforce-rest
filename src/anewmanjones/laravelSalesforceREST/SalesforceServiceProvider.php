@@ -16,7 +16,7 @@ class SalesforceServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->singleton('salesforce', function($app) {
-            return new Salesforce($app['config']);
+            return new Salesforce($app['config']->get('salesforce'));
         });
     }
 }
