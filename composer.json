@@ -1,0 +1,33 @@
+{
+  "name": "anewmanjones/laravel-salesforce-rest",
+  "description": "Laravel 5 Salesforce REST API integration",
+  "keywords": [
+    "laravel",
+    "salesforce",
+    "crm",
+    "laravel 5",
+    "REST"
+  ],
+  "license": "MIT",
+  "type": "project",
+  "authors": [
+    {
+      "name": "Ashleigh Newman-Jones",
+      "email": "ashleigh@infoconnections.co.uk"
+    }
+  ],
+  "require": {
+    "php": ">=5.5.9",
+    "guzzlehttp/guzzle": "^6.2"
+  },
+  "require-dev": {
+    "laravel/framework": "~5.2",
+    "phpunit/phpunit": "~4.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "anewmanjones\\laravelSalesforceREST\\": "src/anewmanjones/laravelSalesforceREST"
+    }
+  },
+  "minimum-stability": "dev"
+}
