@@ -3,7 +3,8 @@
 namespace anewmanjones\laravelSalesforceREST;
 
 use GuzzleHttp\Client;
-use SalesforceException;
+use Psr\Http\Message\ResponseInterface;
+use anewmanjones\laravelSalesforceREST\Exceptions\SalesforceException;
 
 class Salesforce
 {
@@ -64,11 +65,7 @@ class Salesforce
     {
         $this->config = $config;
 
-        $this->client = new Client([
-            'headers' => [
-                'Accept' => 'application/json'
-            ]
-        ]);
+        $this->client = new Client();
 
         $this->login();
     }
@@ -83,17 +80,30 @@ class Salesforce
     {
         $defaultOptions = [
             'headers' => [
-                'Authorization' => 'Bearer ' . $this->accessToken,
-                'X-PrettyPrint' => '1',
-                'Accept'        => 'application/json'
+                'Authorization'   => 'Bearer ' . $this->accessToken,
+                'X-PrettyPrint'   => '1',
+                'Accept'          => 'application/json',
+                'Accept-Encoding' => 'gzip'
             ]
         ];
 
         $requestOptions = array_merge($defaultOptions, $options);
 
-        $response = $this->client->request($method, $url, $requestOptions)->getBody()->getContents();
+        $response = $this->client->request($method, $url, $requestOptions);
 
-        return \GuzzleHttp\json_decode($response);
+        $this->checkResponse($response);
+
+        return \GuzzleHttp\json_decode($response->getBody()->getContents());
+    }
+
+    /**
+     * @param ResponseInterface $response
+     */
+    private function checkResponse(ResponseInterface $response)
+    {
+        $limit = $response->getHeader('Sforce-Limit-Info');
+
+        \GuzzleHttp\json_decode($response->getBody()->getContents());
     }
 
     /**
@@ -159,8 +169,8 @@ class Salesforce
      * @param string $type
      * @param string $id
      * @param array $fields
-     * @return mixed
-     * @throws SalesforceException
+     * @return miSalesforceExceptionxed
+     * @throws
      */
     public function getRecord($type, $id, array $fields = [])
     {

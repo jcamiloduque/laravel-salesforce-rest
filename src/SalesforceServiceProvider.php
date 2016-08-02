@@ -6,6 +6,8 @@ use Illuminate\Support\ServiceProvider;
 
 class SalesforceServiceProvider extends ServiceProvider
 {
+    protected $defer = true;
+
     public function boot()
     {
         $this->publishes([
@@ -15,8 +17,15 @@ class SalesforceServiceProvider extends ServiceProvider
 
     public function register()
     {
-        $this->app->singleton('salesforce', function($app) {
+        $this->app->singleton(Salesforce::class, function($app) {
             return new Salesforce($app['config']->get('salesforce'));
         });
+    }
+
+    public function provides()
+    {
+        return [
+            Salesforce::class
+        ];
     }
 }
